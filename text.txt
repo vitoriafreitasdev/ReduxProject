@@ -1,0 +1,2 @@
+https://api.sampleapis.com/coffee/iced
+https://api.sampleapis.com/coffee/hot
