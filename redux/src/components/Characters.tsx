@@ -1,5 +1,5 @@
 import useFetch from "../hooks/useFetch";
-
+import "./Characters.css"
 interface AmiiboRelease {
   au?: string;
   eu?: string;
@@ -32,12 +32,13 @@ Filtrar e buscar usuários pelo nome
 Exibir o total de favoritos
 
 */
-const Coffes = () => {
+const Characters = () => {
   const { data } = useFetch<AmiiboResponse>(
     "https://www.amiiboapi.com/api/amiibo/?name=mario"
   );
 
-  if (!data) return <p>Nenhum dado encontrado</p>;
+  console.log(data)
+  if (!data) return <p>Carregando...</p>;
 
   return (
     <div>
@@ -46,10 +47,11 @@ const Coffes = () => {
         <div key={d.character}>
           <p><strong>Série:</strong> {d.amiiboSeries}</p>
           <p><strong>Personagem:</strong> {d.character}</p>
+          <img className="img" src={d.image} alt="" />
         </div>
       ))}
     </div>
   );
 };
 
-export default Coffes;
+export default Characters;

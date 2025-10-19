@@ -1,12 +1,12 @@
 
 import './App.css'
-import Coffes from './components/Coffes'
+import Characters from './components/Characters'
 
 function App() {
 
   return (
     <>
-      <Coffes/>
+      <Characters/>
     </>
   )
 }
