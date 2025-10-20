@@ -1,17 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// testar carregar os dados da api usando o reducer apiData
-// Adicionar/remover usuários dos favoritos (armazenados no Redux)
+interface AmiiboRelease {
+  au?: string;
+  eu?: string;
+  jp?: string;
+  na?: string;
+}
+
+interface AmiiboItem {
+  amiiboSeries: string;
+  character: string;
+  gameSeries: string;
+  head: string;
+  image: string;
+  name: string;
+  release: AmiiboRelease;
+  tail: string;
+  type: string;
+}
+
+interface AmiiboResponse {
+  amiibo: AmiiboItem[];
+}
+
 
 interface UserState {
-    favoritesCharacters: string[],
-    users: []
+    favoritesCharacters: AmiiboItem[]
+    users: AmiiboResponse | null,
+    loading: boolean
 }
 
 const initialState: UserState = {
     favoritesCharacters: [],
-    users: []
+    users: null,
+    loading: false 
 }
 
 const characterSlice = createSlice({
@@ -19,16 +42,18 @@ const characterSlice = createSlice({
     initialState,
     reducers: {
         addToFavorites: (state, action) => {
-            
+            state.favoritesCharacters.push(action.payload)
         }
     },
     extraReducers: (builder) => {
         builder
-        .addCase(apiData.pending, () => {
-            console.log("Aguarde")
+        .addCase(apiData.pending, (state) => {
+            state.loading = true 
         })
         .addCase(apiData.fulfilled, (state, action) => {
             state.users = action.payload
+            state.loading = false
+
         })
         .addCase(apiData.rejected, (_, action) => {
             console.log("Error ", action.error.message)
@@ -40,10 +65,12 @@ export const apiData = createAsyncThunk(
     "character/apiData", 
     async(url: string) => {
         const data = await fetch(url)
-        const json = data.json()
+        const json = await data.json()
 
         return json
     }
 )
+
+export const {addToFavorites} = characterSlice.actions
 
 export default characterSlice.reducer
