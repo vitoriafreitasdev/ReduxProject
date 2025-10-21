@@ -1,5 +1,114 @@
+.loading-div{
+    height: 100vh;
+    background-color: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.search-input{
+    width: 500px;
+    padding: 0.3rem;
+    border: 1px solid black;
+
+
+}
+.search-btn{
+    padding: 0.3rem;
+    background-color: #fff;
+    border: 1px solid black;
+    margin: 2px;
+
+}
+
+.main-div{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: gray;
+    padding: 2rem;
+}
+
+.showFavsbBtn{
+    width: 160px;
+    height: 30px;
+    margin: 0.4rem;
+    border: 1.5px solid black;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.characters-main-container{
+    display: flex;
+    width: 50%;
+    margin: 4rem;
+    padding: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 0.5rem;
+
+}
+.characters-card{
+    width: 45%;
+    height: 280px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0.4rem;
+    padding: 0.2rem;
+}
+
+.characters-card p{
+    padding: 0.2rem;
+}
+
+
+.delete{
+    width: 130px;
+    height: 15px;
+    margin: 0.4rem;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1.5px solid red;
+    color: rgb(146, 2, 2);
+}
+
+.btn{
+    width: 160px;
+    height: 30px;
+    margin: 0.4rem;
+    border: 1.5px solid green;
+    color: rgb(1, 66, 1);
+    cursor: pointer;
+    background-color: #fff;
+}
+
 .img {
     width: 150px;
     height: 150px;
     object-fit: contain;
+   
+}
+
+.favs-container{
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff15;
+    padding: 2rem;
+    border-radius: 15px;
+}
+
+.favs-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    margin: 1rem;
+    padding: 0.5rem;
 }

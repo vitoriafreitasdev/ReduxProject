@@ -28,13 +28,15 @@ interface AmiiboResponse {
 interface UserState {
     favoritesCharacters: AmiiboItem[]
     users: AmiiboResponse | null,
-    loading: boolean
+    loading: boolean,
+    totalOfFavs: number
 }
 
 const initialState: UserState = {
     favoritesCharacters: [],
     users: null,
-    loading: false 
+    loading: false,
+    totalOfFavs: 0
 }
 
 const characterSlice = createSlice({
@@ -43,6 +45,13 @@ const characterSlice = createSlice({
     reducers: {
         addToFavorites: (state, action) => {
             state.favoritesCharacters.push(action.payload)
+            state.totalOfFavs += 1
+
+        },
+        deleteOfFavorites: (state, action) => {
+            state.favoritesCharacters = state.favoritesCharacters.filter((f) => f.image != action.payload.image)
+            state.totalOfFavs -= 1
+
         }
     },
     extraReducers: (builder) => {
@@ -71,6 +80,6 @@ export const apiData = createAsyncThunk(
     }
 )
 
-export const {addToFavorites} = characterSlice.actions
+export const {addToFavorites, deleteOfFavorites} = characterSlice.actions
 
 export default characterSlice.reducer
