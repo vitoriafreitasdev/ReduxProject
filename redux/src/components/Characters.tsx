@@ -23,6 +23,8 @@ const Characters = () => {
   const favoritos = useSelector((state: RootState) => state.character.favoritesCharacters )
   const loading = useSelector((state: RootState) => state.character.loading)
   const totalOfFavs = useSelector((state: RootState) => state.character.totalOfFavs)
+  const [searchBar, setSearchBar] = useState<string>("")
+  const [search, setSearch] = useState<string>("")
   const [showFavs, setShowFavs] = useState<boolean>(false)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -38,16 +40,20 @@ const Characters = () => {
 
   if (loading) return <div className="loading-div">Carregando...</div>
 
-  // Fazer => filtrar e buscar usuários pelo nome
+
+  const searchBtn = (character: string) => {
+    setSearch(character)
+  }
 
   return (
     <div className="main-div">
       <h1>Personagens</h1>
       <div className="search-div">
-        <input type="text" placeholder="Buscar pelo nome" className="search-input"/>
-        <button className="search-btn">Procurar</button>
+        <input onChange={(e) => setSearchBar(e.target.value)} type="text" placeholder="Buscar pelo nome" className="search-input"/>
+        <button className="search-btn" onClick={() => searchBtn(searchBar)}>Procurar</button>
       </div>
       <button onClick={() => setShowFavs(!showFavs)} className="showFavsbBtn">Mostrar favoritos</button>
+      {/* Para mostrar favoritos adicionados */}
       {showFavs &&  <div className="favs-container">
         <p>Total de favoritos: {totalOfFavs}</p>
         {favoritos.length > 0 ? favoritos.map((f) => (
@@ -59,13 +65,24 @@ const Characters = () => {
           </div>
         )) : <div>Não tem favoritos adicionados</div>}
       </div> }
+      {/* Personagens vindo da API, se o usuário não digitar nada para procurar, mostra todos, se tiver digitado algo mostrará os que ele digito */}
       <div className="characters-main-container">
-        {data && data?.amiibo?.map((d) => (
+        {data && search.length === 0 ? data?.amiibo?.map((d) => (
         <div key={d.tail + d.head} className="characters-card"> 
           <p><strong>Série:</strong> {d.amiiboSeries}</p>
           <p><strong>Personagem:</strong> {d.character}</p>
+          <p><strong>Nome:</strong> {d.name}</p>
           <img className="img" src={d.image} alt="" />
           <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
+        </div>
+      )) : data?.amiibo.map((d) => (
+        <div key={d.tail + d.head} className="search-characters-card">
+          {d.name.includes(search) && <>
+            <p><strong>Série:</strong> {d.amiiboSeries}</p>
+            <p><strong>Personagem:</strong> {d.character}</p>
+            <img className="img" src={d.image} alt="" />
+            <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
+          </> }
         </div>
       ))}
       </div>
