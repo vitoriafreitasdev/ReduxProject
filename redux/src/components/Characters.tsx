@@ -5,13 +5,14 @@ import "./Characters.css"
 import type { RootState } from "../state/store";
 import { useEffect, useState } from "react";
 import type { AppDispatch } from "../state/store";
-import { addToFavorites, apiData, deleteOfFavorites } from "../state/characters/characterSlice";
+import { addToFavorites, apiData, deleteOfFavorites, filterData } from "../state/characters/characterSlice";
 
 const Characters = () => {
   const data = useSelector((state: RootState) => state.character.users )
   const favoritos = useSelector((state: RootState) => state.character.favoritesCharacters )
   const loading = useSelector((state: RootState) => state.character.loading)
   const totalOfFavs = useSelector((state: RootState) => state.character.totalOfFavs)
+  const filter = useSelector((state: RootState) => state.character.filter)
   const [searchBar, setSearchBar] = useState<string>("")
   const [search, setSearch] = useState<string>("")
   const [showFavs, setShowFavs] = useState<boolean>(false)
@@ -21,6 +22,7 @@ const Characters = () => {
   useEffect(() => {
     const loadData = () => {
       dispatch(apiData("https://www.amiiboapi.com/api/amiibo/?name=mario"))
+
     }
 
     loadData()
@@ -28,19 +30,24 @@ const Characters = () => {
   }, [dispatch])
 
   if (loading) return <div className="loading-div">Carregando...</div>
+  
 
 
   // Para pesquisar com a tecla "Enter"
-  const searchWithKey = (e: { key: string; }) => {
-    if(e.key === "Enter"){
-        setSearch(searchBar)
-    }
+const searchWithKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === "Enter") {
+    setSearch(searchBar)
+    dispatch(filterData(e.currentTarget.value))
   }
+}
+
   // Para pesquisar apertando no botão
   const searchBtn = (character: string) => {
     setSearch(character)
-  }
+    dispatch(filterData(character))
 
+  }
+  
   return (
     <div className="main-div">
       <h1>Personagens</h1>
@@ -71,15 +78,15 @@ const Characters = () => {
           <img className="img" src={d.image} alt="" />
           <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
         </div>
-      )) : data?.amiibo.map((d) => (
+      )) : filter?.map((d) => (
         <div key={d.tail + d.head} className={d.name.includes(search) ? "characters-card" : ""}>
-          {d.name.includes(search) && <>
+           <>
             <p><strong>Série:</strong> {d.amiiboSeries}</p>
             <p><strong>Personagem:</strong> {d.character}</p>
             <p><strong>Nome:</strong> {d.name}</p>
             <img className="img" src={d.image} alt="" />
             <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
-          </> }
+          </> 
         </div>
       ))}
       </div>
