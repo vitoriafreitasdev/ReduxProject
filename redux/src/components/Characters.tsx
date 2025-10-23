@@ -1,5 +1,4 @@
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { useSelector, useDispatch } from "react-redux";
 import "./Characters.css"
@@ -8,17 +7,7 @@ import { useEffect, useState } from "react";
 import type { AppDispatch } from "../state/store";
 import { addToFavorites, apiData, deleteOfFavorites } from "../state/characters/characterSlice";
 
-/*
-Ver todos os usuários (dados vindos da API)
-
-Adicionar/remover usuários dos favoritos (armazenados no Redux)
-
-Exibir o total de favoritos
-
-*/
 const Characters = () => {
-  
-
   const data = useSelector((state: RootState) => state.character.users )
   const favoritos = useSelector((state: RootState) => state.character.favoritesCharacters )
   const loading = useSelector((state: RootState) => state.character.loading)
@@ -41,6 +30,13 @@ const Characters = () => {
   if (loading) return <div className="loading-div">Carregando...</div>
 
 
+  // Para pesquisar com a tecla "Enter"
+  const searchWithKey = (e: { key: string; }) => {
+    if(e.key === "Enter"){
+        setSearch(searchBar)
+    }
+  }
+  // Para pesquisar apertando no botão
   const searchBtn = (character: string) => {
     setSearch(character)
   }
@@ -49,8 +45,8 @@ const Characters = () => {
     <div className="main-div">
       <h1>Personagens</h1>
       <div className="search-div">
-        <input onChange={(e) => setSearchBar(e.target.value)} type="text" placeholder="Buscar pelo nome" className="search-input"/>
-        <button className="search-btn" onClick={() => searchBtn(searchBar)}>Procurar</button>
+        <input onChange={(e) => setSearchBar(e.target.value)} onKeyDown={searchWithKey} type="text" placeholder="Buscar pelo nome" className="search-input"/>
+        <button className="search-btn"  onClick={() => searchBtn(searchBar)}>Procurar</button>
       </div>
       <button onClick={() => setShowFavs(!showFavs)} className="showFavsbBtn">Mostrar favoritos</button>
       {/* Para mostrar favoritos adicionados */}
@@ -76,10 +72,11 @@ const Characters = () => {
           <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
         </div>
       )) : data?.amiibo.map((d) => (
-        <div key={d.tail + d.head} className="search-characters-card">
+        <div key={d.tail + d.head} className={d.name.includes(search) ? "characters-card" : ""}>
           {d.name.includes(search) && <>
             <p><strong>Série:</strong> {d.amiiboSeries}</p>
             <p><strong>Personagem:</strong> {d.character}</p>
+            <p><strong>Nome:</strong> {d.name}</p>
             <img className="img" src={d.image} alt="" />
             <button onClick={() => dispatch(addToFavorites(d))} className="btn">Adicionar aos favoritos</button>
           </> }

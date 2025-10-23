@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AmiiboRelease {
